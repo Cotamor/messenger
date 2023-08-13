@@ -1,16 +1,11 @@
-'use client'
 import EmptyState from '@/components/EmptyState'
-import { signOut } from 'next-auth/react'
 
 const Users = () => {
+  // Only visible wider than lg screen
   return (
-    <div className="">
-      Hello Users
-      <button onClick={() => signOut()}>Logout</button>
+    <div className="hidden lg:block lg:pl-80 h-full">
+      <EmptyState />
     </div>
-    // <div className="hidden lg:block lg:pl-80 h-full">
-    //     <EmptyState />
-    // </div>
   )
 }
 export default Users
