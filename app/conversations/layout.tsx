@@ -1,18 +1,21 @@
 import getUsers from '@/actions/getUsers'
 import Sidebar from '@/components/sidebar/Sidebar'
-import UserList from './components/UserList'
+import ConversationList from './components/ConversationList'
 
-export default async function Userslayout({
+export default async function ConversationsLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
   const users = await getUsers()
+
   return (
     <Sidebar>
-      <div className="h-full ">
-        <UserList items={users} />
-        {/* Only visible wider than lg */}
+      <div className="w-full">
+        <ConversationList
+          users={users}
+          title='Messages'
+        />
         {children}
       </div>
     </Sidebar>

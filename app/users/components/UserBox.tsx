@@ -14,11 +14,13 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
   const handleClick = () => {
     //TODO: Start a chat functionality
     setIsLoading(true)
-    
+
 
   }
 
   return (
+    <>
+    {/* TODO: Add Loading Modal */}
     <div
       className="
       relative
@@ -45,6 +47,7 @@ const UserBox: React.FC<UserBoxProps> = ({ data }) => {
         </div>
       </div>
     </div>
+    </>
   )
 }
 export default UserBox
