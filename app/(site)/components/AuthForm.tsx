@@ -8,6 +8,9 @@ import Button from '@/components/Button'
 
 import { BsGithub, BsGoogle } from 'react-icons/bs'
 import AuthSocialButton from './AuthSocialButton'
+import axios from 'axios'
+import { toast } from 'react-hot-toast'
+import { signIn } from 'next-auth/react'
 
 type Variant = 'LOGIN' | 'REGISTER'
 
@@ -42,10 +45,28 @@ const AuthForm = () => {
 
     if (variant === 'REGISTER') {
       // Axios Register
+      axios
+        .post('/api/register')
+        .catch(() => toast.error('Something went wrong!'))
+        .finally(() => setIsLoading(false))
     }
 
     if (variant === 'LOGIN') {
       // Axios Login
+      signIn('credentials', {
+        ...data,
+        redirect: false,
+      })
+        .then((callback) => {
+          if (callback?.error) {
+            toast.error('Invalid credentials!')
+          }
+          if (callback?.ok && !callback?.error) {
+            toast.success('Logged in!')
+            router.push('/conversations')
+          }
+        })
+        .finally(() => setIsLoading(false))
     }
   }
 
@@ -53,20 +74,32 @@ const AuthForm = () => {
     setIsLoading(true)
 
     // Nextauth social sign in
+    signIn(action, { redirect: false })
+      .then((callback) => {
+        if (callback?.error) {
+          toast.error('Invalid credentials!')
+        }
+        if (callback?.ok && !callback?.error) {
+          toast.success(`Logged in with ${action}`)
+        }
+      })
+      .finally(() => setIsLoading(false))
   }
 
   return (
     <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div className="bg-white px-4 py-8 shadow sm:rounded-lg sm:px-10">
         <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            disabled={isLoading}
-            register={register}
-            errors={errors}
-            required
-            id="name"
-            label="Name"
-          />
+          {variant === 'REGISTER' && (
+            <Input
+              disabled={isLoading}
+              register={register}
+              errors={errors}
+              required
+              id="name"
+              label="Name"
+            />
+          )}
           <Input
             disabled={isLoading}
             register={register}
