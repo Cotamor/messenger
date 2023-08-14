@@ -1,9 +1,12 @@
 'use client'
 
-import { User } from '@prisma/client'
-import Avatar from '../Avatar'
-import useRoutes from '@/hooks/useRoutes'
 import DesktopItem from './DesktopItem'
+import useRoutes from '@/hooks/useRoutes'
+
+import { useState } from 'react'
+import Avatar from '../Avatar'
+import { User } from '@prisma/client'
+import SettingsModal from './SettingsModal'
 
 interface DesktopSidebarProps {
   currentUser: User
@@ -11,12 +14,20 @@ interface DesktopSidebarProps {
 
 const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
   const routes = useRoutes()
-  console.log('TEST', currentUser)
+  const [isOpen, setIsOpen] = useState(false)
+
+  // console.log('TEST', currentUser)
   //TODO: Add SettingsModal on avatar
 
   return (
-    <div
-      className="
+    <>
+      <SettingsModal
+        currentUser={currentUser}
+        isOpen={isOpen}
+        onClose={() => setIsOpen(false)}
+      />
+      <div
+        className="
       hidden
       lg:fixed
       lg:inset-y-0
@@ -31,27 +42,31 @@ const DesktopSidebar: React.FC<DesktopSidebarProps> = ({ currentUser }) => {
       lg:flex-col
       justify-between
     "
-    >
-      <nav className="mt-4 ">
-        <ul className="flex flex-col items-center space-y-1 ">
-          {routes.map((item) => (
-            <DesktopItem
-              key={item.label}
-              href={item.href}
-              label={item.label}
-              icon={item.icon}
-              active={item.active}
-              onClick={item.onClick}
-            />
-          ))}
-        </ul>
-      </nav>
-      <nav className="mt-4 flex flex-col items-center justify-between ">
-        <div className="cursor-pointer hover:opacity-75 transition">
-          <Avatar user={currentUser} />
-        </div>
-      </nav>
-    </div>
+      >
+        <nav className="mt-4 ">
+          <ul className="flex flex-col items-center space-y-1 ">
+            {routes.map((item) => (
+              <DesktopItem
+                key={item.label}
+                href={item.href}
+                label={item.label}
+                icon={item.icon}
+                active={item.active}
+                onClick={item.onClick}
+              />
+            ))}
+          </ul>
+        </nav>
+        <nav className="mt-4 flex flex-col items-center justify-between ">
+          <div
+            onClick={() => setIsOpen(true)}
+            className="cursor-pointer hover:opacity-75 transition"
+          >
+            <Avatar user={currentUser} />
+          </div>
+        </nav>
+      </div>
+    </>
   )
 }
 export default DesktopSidebar

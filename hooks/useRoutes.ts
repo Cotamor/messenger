@@ -4,9 +4,11 @@ import { useMemo } from 'react'
 
 import { HiChat, HiUsers } from 'react-icons/hi'
 import { HiArrowLeftOnRectangle } from 'react-icons/hi2'
+import useConversation from './useConversation'
 
 const useRoutes = () => {
   const pathname = usePathname()
+  const { conversationId } = useConversation()
 
   const routes = useMemo(
     () => [
@@ -14,12 +16,13 @@ const useRoutes = () => {
         label: 'Chat',
         href: '/conversations',
         icon: HiChat,
-        active: pathname === '/conversations',
+        active: pathname === '/conversations' || !!conversationId,
       },
       {
         label: 'Users',
         href: '/users',
         icon: HiUsers,
+        active: pathname === '/users',
       },
       {
         label: 'Logout',
@@ -28,7 +31,7 @@ const useRoutes = () => {
         icon: HiArrowLeftOnRectangle,
       },
     ],
-    [pathname]
+    [pathname, conversationId]
   )
 
   return routes
