@@ -25,7 +25,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   const router = useRouter()
   const [isLoading, setIsLoading] = useState(false)
 
-  console.log(currentUser, '&TEST_CURRENT_USER')
+  // console.log(currentUser, '&TEST_CURRENT_USER')
 
   // TODO: Profile Setting form and update personal infos
 
@@ -37,8 +37,8 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
     formState: { errors },
   } = useForm<FieldValues>({
     defaultValues: {
-      name: currentUser.name,
-      image: currentUser.image,
+      name: currentUser?.name,
+      image: currentUser?.image,
     },
   })
 

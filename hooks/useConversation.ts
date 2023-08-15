@@ -4,8 +4,6 @@ import { useMemo } from 'react'
 const useConversation = () => {
   const params = useParams()
 
-  console.log('params:conversationId', params)
-
   const conversationId = useMemo(() => {
     if (!params?.conversationId) {
       return ''
