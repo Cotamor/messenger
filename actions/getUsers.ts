@@ -4,7 +4,7 @@ import getSession from './getSession'
 const getUsers = async () => {
   const session = await getSession()
 
-  // TODO: Why do we need this?
+  // check current user logged in
   if(!session?.user?.email) {
     return []
   }
@@ -14,7 +14,7 @@ const getUsers = async () => {
       orderBy: {
         createdAt: 'desc'
       },
-      // TODO: meaning NOT
+      // excluding current user
       where: {
         NOT : {
           email: session.user.email
