@@ -21,7 +21,7 @@ const MessageInput: React.FC<MessageInputProps> = ({
   return (
     <div className="relative w-full">
       <input
-        type="text"
+        type={type}
         id={id}
         autoComplete={id}
         placeholder={placeholder}

@@ -1,9 +1,11 @@
 'use client'
 
 import Avatar from '@/components/Avatar'
+import AvatarGroup from '@/components/AvatarGroup'
 import useOtherUser from '@/hooks/useOtherUser'
 import { Conversation, User } from '@prisma/client'
 import Link from 'next/link'
+import { useMemo } from 'react'
 import { HiChevronLeft } from 'react-icons/hi'
 import { HiEllipsisHorizontal } from 'react-icons/hi2'
 
@@ -15,6 +17,17 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ conversation }) => {
   const otherUser = useOtherUser(conversation)
+
+  // Temporary status
+  const isActive = true
+
+  const statusText = useMemo(()=>{
+    if(conversation.isGroup) {
+      return `${conversation.users.length} members`
+    }
+
+    return isActive ? 'Active': 'Offline'
+  },[conversation, isActive])
 
   return (
     <div
@@ -40,13 +53,16 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
           <HiChevronLeft size={32} />
         </Link>
         {conversation.isGroup ? (
-          <div className="">Avatar Group</div>
+          // <div className="">Avatar Group</div>
+          <AvatarGroup users={conversation.users} />
         ) : (
           <Avatar user={otherUser} />
         )}
         <div className="flex flex-col">
           <div className="">{conversation.name || otherUser.name}</div>
-          <div className="text-sm font-light text-neutral-500">Offline...</div>
+          <div className="text-sm font-light text-neutral-500">
+            {statusText}
+          </div>
         </div>
       </div>
       <HiEllipsisHorizontal

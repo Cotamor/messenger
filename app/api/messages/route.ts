@@ -13,10 +13,6 @@ export async function POST(request: Request) {
     }
 
     const newMessage = await prisma.message.create({
-      include: {
-        seen: true,
-        sender: true,
-      },
       data: {
         body: message,
         image: image,
@@ -32,9 +28,36 @@ export async function POST(request: Request) {
           },
         },
       },
+      include: {
+        seen: true,
+        sender: true,
+      },
     })
 
-    // TODO: updatedConversation and pusher
+    const updatedConversation = await prisma.conversation.update({
+      where: {
+        id: conversationId
+      },
+      data: {
+        lastMessageAt: new Date(),
+        messages: {
+          connect: {
+            id: newMessage.id
+          }
+        }
+      },
+      include: {
+        users: true,
+        messages: {
+          include: {
+            seen: true
+          }
+        }
+      }
+    })
+    // TODO:Create pusher
+
+    
 
     return NextResponse.json(newMessage)
   } catch (error) {

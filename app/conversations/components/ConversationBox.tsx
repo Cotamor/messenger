@@ -24,8 +24,6 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
   const session = useSession()
   const router = useRouter()
 
-  console.log(data, 'ConvBox')
-
   const handleClick = useCallback(() => {
     router.push(`/conversations/${data.id}`)
   }, [router, data])
@@ -59,7 +57,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
 
   const lastMessageText = useMemo(() => {
     if (lastMessage?.image) {
-      return 'Sent a image'
+      return 'Sent an image'
     }
 
     if (lastMessage?.body) {
@@ -96,7 +94,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
       )}
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-1">
-          <p className="text-md font-medium text-gray-900">
+          <p className="text-base font-medium text-gray-900">
             {/*Conversation's name or otherUser's name */}
             {data.name || otherUser.name}
           </p>
@@ -110,7 +108,7 @@ const ConversationBox: React.FC<ConversationBoxProps> = ({
           className={clsx(
             `
           truncate
-          text-sm
+          text-xs
         `,
             hasSeen ? 'text-gray-500' : 'text-black font-medium'
           )}
