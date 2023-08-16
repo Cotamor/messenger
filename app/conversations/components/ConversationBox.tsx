@@ -1,48 +1,79 @@
-import Avatar from "@/components/Avatar"
-import useOtherUser from "@/hooks/useOtherUser"
-import { FullConversationType } from "@/types"
-import clsx from "clsx"
-import { useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
-import { useCallback, useMemo } from "react"
+'use client'
+
+import { useCallback, useMemo } from 'react'
+import { useRouter } from 'next/navigation'
+import { format } from 'date-fns'
+import { useSession } from 'next-auth/react'
+import clsx from 'clsx'
+
+import Avatar from '@/components/Avatar'
+import useOtherUser from '@/hooks/useOtherUser'
+import { FullConversationType } from '@/types'
+import AvatarGroup from '@/components/AvatarGroup'
 
 interface ConversationBoxProps {
   data: FullConversationType
-  selected: boolean
+  selected?: boolean
 }
 
-const ConversationBox:React.FC<ConversationBoxProps> = ({
+const ConversationBox: React.FC<ConversationBoxProps> = ({
   data,
-  selected
+  selected,
 }) => {
   const otherUser = useOtherUser(data)
   const session = useSession()
   const router = useRouter()
-  
+
   console.log(data, 'ConvBox')
 
-  const handleClick = useCallback(()=>{
+  const handleClick = useCallback(() => {
     router.push(`/conversations/${data.id}`)
-  },[router, data])
+  }, [router, data])
 
-  //TODO: create lastMessage
-  const lastMessage = useMemo(()=>{},[])
-  
-  //TODO: create userEmail
-  const userEmail = useMemo(()=>{},[])
-  
-  //TODO: create hasSeen
-  const hasSeen = useMemo(()=>{
-    return false
-  },[])
-  
-  //TODO: create lastMessageText
-  const lastMessageText = useMemo(()=>{},[])
+  const lastMessage = useMemo(() => {
+    const messages = data.messages || []
+
+    return messages[messages.length - 1]
+  }, [data.messages])
+
+  // currentUser's email
+  const userEmail = useMemo(
+    () => session.data?.user?.email,
+    [session.data?.user?.email]
+  )
+
+  const hasSeen = useMemo(() => {
+    if (!lastMessage) {
+      return false
+    }
+
+    // Array of users who has seen the message
+    const seenArray = lastMessage.seen || []
+
+    if (!userEmail) {
+      return false
+    }
+    // currentUser has seen the message?
+    return seenArray.filter((user) => user.email === userEmail).length !== 0
+  }, [lastMessage, userEmail])
+
+  const lastMessageText = useMemo(() => {
+    if (lastMessage?.image) {
+      return 'Sent a image'
+    }
+
+    if (lastMessage?.body) {
+      return lastMessage?.body
+    }
+
+    return 'Started a conversation'
+  }, [lastMessage])
 
   return (
     <div
       onClick={handleClick}
-      className={clsx(`
+      className={clsx(
+        `
         w-full
         relative
         flex
@@ -58,27 +89,34 @@ const ConversationBox:React.FC<ConversationBoxProps> = ({
       )}
     >
       {data.isGroup ? (
-        <div className="">Avatar Group</div>
+        // <div className="">Avatar Group</div>
+        <AvatarGroup users={data.users} />
       ) : (
-      <Avatar user={otherUser} />
+        <Avatar user={otherUser} />
       )}
       <div className="flex-1 min-w-0">
         <div className="flex items-center justify-between mb-1">
           <p className="text-md font-medium text-gray-900">
-            {/* data.name === Conversation's name */}
-            {data.name || otherUser.name }
+            {/*Conversation's name or otherUser's name */}
+            {data.name || otherUser.name}
           </p>
-          {/* TODO: date of laseMessage */}
-          <p className="text-xs text-gray-400 font-light">2023.08.10...</p>
+          {lastMessage?.createdAt && (
+            <p className="text-xs text-gray-400 font-light">
+              {format(new Date(lastMessage.createdAt), 'p')}
+            </p>
+          )}
         </div>
-        <p className={clsx(`
+        <p
+          className={clsx(
+            `
           truncate
           text-sm
         `,
-          hasSeen ? 'text-gray-500' : 'text-black font-medium'
-        )}>
+            hasSeen ? 'text-gray-500' : 'text-black font-medium'
+          )}
+        >
           {/* TODO: last text message */}
-          last text message.....
+          {lastMessageText}
         </p>
       </div>
     </div>
