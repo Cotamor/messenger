@@ -7,6 +7,8 @@ import { useSession } from 'next-auth/react'
 import { FullMessageType } from '@/types'
 
 import Avatar from '@/components/Avatar'
+import { useState } from 'react'
+import ImageModal from './ImageModal'
 
 interface MessageBoxProps {
   data: FullMessageType
@@ -15,6 +17,7 @@ interface MessageBoxProps {
 
 const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
   const session = useSession()
+  const [imageModalOpen, setImageModalOpen] = useState(false)
 
   const isOwn = session.data?.user?.email === data?.sender?.email
   const seenList = (data.seen || [])
@@ -44,14 +47,18 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
           </div>
         </div>
         <div className={message}>
-          {/* TODO: add imageModal */}
+          <ImageModal
+            isOpen={imageModalOpen}
+            onClose={() => setImageModalOpen(false)}
+            src={data.image}
+          />
           {data.image ? (
             <Image
               alt="image"
               height="288"
               width="288"
               src={data.image}
-              onClick={() => {}}
+              onClick={() => setImageModalOpen(true)}
               className="
                 object-cover
                 cursor-pointer

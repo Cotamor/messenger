@@ -1,6 +1,7 @@
 'use client'
 
-import ReactSelect from 'react-select'
+import clsx from 'clsx'
+import ReactSelect, { Options, StylesConfig, defaultTheme } from 'react-select'
 
 interface SelectProps {
   label: string
@@ -17,30 +18,39 @@ const Select: React.FC<SelectProps> = ({
   options,
   disabled,
 }) => {
+  const customStyles: StylesConfig = {
+    menuPortal: (base) => ({ ...base, zIndex: 9999 }),
+    option: (styles) => {
+      return {
+        ...styles,
+        fontSize: '14px',
+      }
+    },
+    placeholder: (styles) => {
+      return {
+        ...styles,
+        fontSize: '14px',
+      }
+    }
+  }
+
   return (
     <div className="z-[100]">
-      <label className="">
+      <label className="block text-sm font-medium leading-6 text-gray-900">
         {label}
       </label>
       <div className="mt-2">
-        <ReactSelect 
+        <ReactSelect
           isDisabled={disabled}
           value={value}
           onChange={onChange}
           isMulti
           options={options}
-          // menuPortalTarget={document.body}
-          // styles={{
-          //   menuPortal: (base) => ({...base, zIndex:9999})
-          // }}
-          classNames={{
-            control: () => 'text-sm'
-          }}
+          menuPortalTarget={document.body}
+          styles={customStyles}
         />
       </div>
-
     </div>
   )
-
 }
 export default Select
