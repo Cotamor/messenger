@@ -46,7 +46,6 @@ const Input: React.FC<InputProps> = ({
             border-0
             p-1.5
             text-gray-900
-            shadow-sm
             ring-1
             ring-inset
             ring-gray-300
@@ -62,6 +61,7 @@ const Input: React.FC<InputProps> = ({
           )}
         />
       </div>
+        {errors[id] && <span className='text-xs text-red-600 font-light'>this field required</span>}
     </div>
   )
 }

@@ -9,6 +9,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { MdOutlineGroupAdd } from 'react-icons/md'
 import ConversationBox from './ConversationBox'
+import GroupChatModal from '@/components/modals/GroupChatModal'
 
 interface ConversationListProps {
   users: User[]
@@ -22,6 +23,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
   title,
 }) => {
   const [items, setItems] = useState(initialItems)
+  const [isModalOpen, setIsModalOpen] = useState(false)
 
   const router = useRouter()
   const session = useSession()
@@ -30,7 +32,11 @@ const ConversationList: React.FC<ConversationListProps> = ({
 
   return (
     <>
-      {/* TODO: Add Group chat modal */}
+      <GroupChatModal
+        users={users}
+        isOpen={isModalOpen}
+        onClose={()=>setIsModalOpen(false)}
+      />
       <aside
         className={clsx(
           `
@@ -51,7 +57,7 @@ const ConversationList: React.FC<ConversationListProps> = ({
         <div className="px-5">
           <div className="flex justify-between mb-4 pt-4">
             <div className="text-2xl font-bold text-neutral-800">Message</div>
-            <div className="rounded-ful p-2 bg-gray-100 text-gray-600 cursor-pointer hover:opacity-75">
+            <div onClick={()=>setIsModalOpen(true)} className="rounded-ful p-2 bg-gray-100 text-gray-600 cursor-pointer hover:opacity-75">
               <MdOutlineGroupAdd size={20} />
             </div>
           </div>
