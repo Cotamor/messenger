@@ -2,12 +2,12 @@
 
 import clsx from 'clsx'
 import Image from 'next/image'
+import { useState } from 'react'
 import { format } from 'date-fns'
 import { useSession } from 'next-auth/react'
 import { FullMessageType } from '@/types'
 
 import Avatar from '@/components/Avatar'
-import { useState } from 'react'
 import ImageModal from './ImageModal'
 
 interface MessageBoxProps {
@@ -49,9 +49,9 @@ const MessageBox: React.FC<MessageBoxProps> = ({ data, isLast }) => {
         </div>
         <div className={message}>
           <ImageModal
+            src={data.image}
             isOpen={imageModalOpen}
             onClose={() => setImageModalOpen(false)}
-            src={data.image}
           />
           {data.image ? (
             <Image
