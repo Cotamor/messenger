@@ -141,7 +141,7 @@ const AuthForm = () => {
             </div>
             <div className="relative flex justify-center text-sm">
               <span className="bg-white px-2 text-gray-500">
-                Or continew with
+                Or contineu with
               </span>
             </div>
           </div>
@@ -162,7 +162,7 @@ const AuthForm = () => {
           <div>
             {variant === 'LOGIN'
               ? 'New to Messenger'
-              : 'Already have an accound?'}
+              : 'Already have an account?'}
           </div>
           <div className="underline cursor-pointer" onClick={toggleVariant}>
             {variant === 'LOGIN' ? 'Create an accound' : 'Login'}

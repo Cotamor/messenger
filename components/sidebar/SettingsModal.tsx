@@ -45,13 +45,11 @@ const SettingsModal: React.FC<SettingsModalProps> = ({
   const image = watch('image')
 
   const handleUpload = (result: any) => {
-    console.log(result?.info)
     setValue('image', result.info.secure_url, { shouldValidate: true })
   }
 
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     setIsLoading(true)
-    console.log(data)
 
     axios
       .post('/api/settings', data)

@@ -48,6 +48,10 @@ export async function POST(request: Request, { params }: { params: IParams }) {
       where: {
         id: lastMessage.id,
       },
+      include: {
+        sender: true,
+        seen: true,
+      },
       data: {
         seen: {
           connect: {

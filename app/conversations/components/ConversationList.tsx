@@ -33,9 +33,9 @@ const ConversationList: React.FC<ConversationListProps> = ({
   const { conversationId, isOpen } = useConversation()
 
   // Pusher:
-  // const pusherKey = useMemo(() => {
-  //   return session.data?.user?.email
-  // }, [session.data?.user?.email])
+  const pusherKey = useMemo(() => {
+    return session.data?.user?.email
+  }, [session.data?.user?.email])
 
   // useEffect(() => {
   //   if (!pusherKey) {
