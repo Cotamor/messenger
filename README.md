@@ -1,8 +1,8 @@
-## Prisma
+# Messenger Clone App
+
+this project is from a tutorial of Code with Antonio's Youtube channel [link](https://www.youtube.com/watch?v=PGPGcKBpAk8&t=28921s).
+
+## note
 
 1. create models in schema.prisma
 2. npx prisma db push (which create a collection on MongoDB)
-
-Latest:"next": "13.4.13",
-to
-"next": "13.3.1",
