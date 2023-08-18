@@ -22,12 +22,12 @@ const Body: React.FC<BodyProps> = ({ initialMessages = [] }) => {
     axios.post(`/api/conversations/${conversationId}/seen`)
   }, [conversationId])
 
-  // Pusher
+  // Pusher:
   useEffect(() => {
     pusherClient.subscribe(conversationId)
     bottomRef?.current?.scrollIntoView()
 
-    const newMessageHandler = (message: FullMessageType) => {
+    const messageHandler = (message: FullMessageType) => {
       axios.post(`/api/conversations/${conversationId}/seen`)
 
       setMessages((current) => {
@@ -41,23 +41,23 @@ const Body: React.FC<BodyProps> = ({ initialMessages = [] }) => {
       bottomRef?.current?.scrollIntoView()
     }
 
-    const seenUpdateMessageHandler = (seenUpdatedMessage: FullMessageType) =>{
+    const updateMessageHandler = (updatedMessage: FullMessageType) =>{
       setMessages((current) => current.map((currentMessage) => {
         // Replace with updated one
-        if(currentMessage.id === seenUpdatedMessage.id) {
-          return seenUpdatedMessage
+        if(currentMessage.id === updatedMessage.id) {
+          return updatedMessage
         }
         return currentMessage
       }))
     }
 
-    pusherClient.bind('messages:new', newMessageHandler)
-    pusherClient.bind('message:update', seenUpdateMessageHandler)
+    pusherClient.bind('message:new', messageHandler)
+    pusherClient.bind('message:update', updateMessageHandler)
 
     return () => {
       pusherClient.unsubscribe(conversationId)
-      pusherClient.unbind('messages:new', newMessageHandler)
-      pusherClient.unbind('message:update', seenUpdateMessageHandler)
+      pusherClient.unbind('message:new', messageHandler)
+      pusherClient.unbind('message:update', updateMessageHandler)
     }
   }, [conversationId])
 
