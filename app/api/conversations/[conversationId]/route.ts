@@ -42,15 +42,15 @@ export async function DELETE(
     })
 
     // Pusher:
-    // existingConversation.users.forEach((user) => {
-    //   if (user.email) {
-    //     pusherServer.trigger(
-    //       user.email,
-    //       'conversation:remove',
-    //       existingConversation
-    //     )
-    //   }
-    // })
+    existingConversation.users.forEach((user) => {
+      if (user.email) {
+        pusherServer.trigger(
+          user.email,
+          'conversation:remove',
+          existingConversation
+        )
+      }
+    })
 
     return NextResponse.json(deletedConversation)
   } catch (error) {

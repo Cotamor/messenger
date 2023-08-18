@@ -11,6 +11,7 @@ import { format } from 'date-fns'
 import { Fragment, useMemo, useState } from 'react'
 import { IoClose, IoTrash } from 'react-icons/io5'
 import ConfirmModal from './ConfirmModal'
+import useActiveList from '@/hooks/useActiveList'
 
 interface ProfileDrawerProps {
   data: Conversation & {
@@ -37,7 +38,9 @@ const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
   }, [data.name, otherUser.name])
 
   // TODO: Active member
-  const isActive = false
+  // const isActive = false
+  const {members} = useActiveList()
+  const isActive = members.indexOf(otherUser?.email!) !== -1
 
   const statusText = useMemo(() => {
     if (data.isGroup) {

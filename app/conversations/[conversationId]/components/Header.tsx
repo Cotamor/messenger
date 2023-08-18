@@ -9,6 +9,7 @@ import { useMemo, useState } from 'react'
 import { HiChevronLeft } from 'react-icons/hi'
 import { HiEllipsisHorizontal } from 'react-icons/hi2'
 import ProfileDrawer from './ProfileDrawer'
+import useActiveList from '@/hooks/useActiveList'
 
 interface HeaderProps {
   conversation: Conversation & {
@@ -20,8 +21,8 @@ const Header: React.FC<HeaderProps> = ({ conversation }) => {
   const otherUser = useOtherUser(conversation)
   const [drawerOpen, setDrawerOpen] = useState(false)
 
-  // Temporary status
-  const isActive = true
+  const {members} = useActiveList()
+  const isActive = members.indexOf(otherUser?.email!) !== -1
 
   const statusText = useMemo(() => {
     if (conversation.isGroup) {
