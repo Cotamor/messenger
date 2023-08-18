@@ -1,11 +1,12 @@
 'use client'
 
-import useConversation from '@/hooks/useConversation'
-import { FullMessageType } from '@/types'
-import { useEffect, useRef, useState } from 'react'
-import MessageBox from './MessageBox'
 import axios from 'axios'
+import { useEffect, useRef, useState } from 'react'
+
 import { pusherClient } from '@/libs/pusher'
+import useConversation from '@/hooks/useConversation'
+import MessageBox from './MessageBox'
+import { FullMessageType } from '@/types'
 import { find } from 'lodash'
 
 interface BodyProps {
@@ -41,23 +42,25 @@ const Body: React.FC<BodyProps> = ({ initialMessages = [] }) => {
       bottomRef?.current?.scrollIntoView()
     }
 
-    const updateMessageHandler = (updatedMessage: FullMessageType) =>{
-      setMessages((current) => current.map((currentMessage) => {
-        // Replace with updated one
-        if(currentMessage.id === updatedMessage.id) {
-          return updatedMessage
-        }
-        return currentMessage
-      }))
+    const updateMessageHandler = (updatedMessage: FullMessageType) => {
+      setMessages((current) =>
+        current.map((currentMessage) => {
+          // Replace with updated one
+          if (currentMessage.id === updatedMessage.id) {
+            return updatedMessage
+          }
+          return currentMessage
+        })
+      )
     }
 
     pusherClient.bind('message:new', messageHandler)
-    pusherClient.bind('message:update', updateMessageHandler)
+    // pusherClient.bind('message:update', updateMessageHandler)
 
     return () => {
       pusherClient.unsubscribe(conversationId)
       pusherClient.unbind('message:new', messageHandler)
-      pusherClient.unbind('message:update', updateMessageHandler)
+      // pusherClient.unbind('message:update', updateMessageHandler)
     }
   }, [conversationId])
 
@@ -65,9 +68,9 @@ const Body: React.FC<BodyProps> = ({ initialMessages = [] }) => {
     <div className="flex-1 overflow-y-auto">
       {messages.map((message, i) => (
         <MessageBox
+          isLast={i === messages.length - 1}
           key={message.id}
           data={message}
-          isLast={i === messages.length - 1}
         />
       ))}
       <div className="pt-24" ref={bottomRef} />
